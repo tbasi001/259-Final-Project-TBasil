@@ -1,0 +1,184 @@
+---
+title: "259 Final Project - TB"
+output: html_document
+---
+
+Clearing environment and setting working directory
+
+```{r}
+rm(list=ls())
+
+setwd("/Users/csuftitan/Desktop/Grit Study 3/Final Data")
+getwd()
+```
+
+Loading data
+
+```{r}
+data <- read.csv("Full Final V4.csv", header=TRUE, na.strings="", 
+                 stringsAsFactors = TRUE)
+```
+
+Difference scores
+
+```{r}
+it.dfp <- as.data.frame(matrix(ncol = 6))
+datatestp <- data
+for(i in 1:225){
+  list.sub <- c(datatestp$sub.id[datatestp$attention==max(datatestp$attention)])
+  datatestp <- subset(datatestp, sub.id != list.sub[1])
+  
+  bfi.c.cur <- datatestp[, c("bfico.3r", "bficp.8r", "bficr.13", "bfico.18","bficp.23r","bficr.28r",
+                             "bfico.33.ac1a", "bficp.38","bficr.43","bfico.48r", "bficp.53", "bficr.58r")]
+  bfi.c.alpha.cur <- psych::alpha(bfi.c.cur)
+  bfi.c.alpha.cur <- bfi.c.alpha.cur$total[1]
+  
+  bfi.e.cur <- datatestp[, c("bfies.1", "bfiea.6", "bfiee.11r.ac2a", "bfies.16r", "bfiea.21", "bfiee.26r", 
+                             "bfies.31r", "bfiea.36r", "bfiee.41", "bfies.46", "bfiea.51r", "bfiee.56")]
+  bfi.e.alpha.cur <- psych::alpha(bfi.e.cur)
+  bfi.e.alpha.cur <- bfi.e.alpha.cur$total[1]
+  
+  bfi.n.cur <- datatestp[, c("bfina.4r","bfind.9r", "bfine.14","bfina.19","bfind.24r.ac4a", "bfine.29r", 
+                             "bfina.34", "bfind.39", "bfine.44r", "bfina.49r", "bfind.54", "bfine.59")]
+  bfi.n.alpha.cur <- psych::alpha(bfi.n.cur)
+  bfi.n.alpha.cur <- bfi.n.alpha.cur$total[1]  
+  
+  bfi.a.cur <- datatestp[, c("bfiac.2", "bfiar.7", "bfiat.12r.ac3a", "bfiac.17r", "bfiar.22r", "bfiat.27",
+                             "bfiac.32", "bfiar.37r", "bfiat.42r", "bfiac.47r", "bfiar.52", "bfiat.57")]
+  bfi.a.alpha.cur <- psych::alpha(bfi.a.cur)
+  bfi.a.alpha.cur <- bfi.a.alpha.cur$total[1] 
+  
+  bfi.o.cur <- datatestp[, c("bfioa.5r.ac5a", "bfioi.10", "bfioc.15", "bfioa.20", "bfioi.25r", "bfioc.30r", "bfioa.35", 
+                             "bfioi.40", "bfioc.45r", "bfioa.50r", "bfioi.55r", "bfioc.60")]
+  bfi.o.alpha.cur <- psych::alpha(bfi.o.cur)
+  bfi.o.alpha.cur <- bfi.o.alpha.cur$total[1] 
+  
+  it.dfp[i,] <- data.frame(sub.id = list.sub[1], alphaUpdate.c = bfi.c.alpha.cur, alphaUpdate.e = bfi.e.alpha.cur, 
+                           alphaUpdate.n = bfi.n.alpha.cur, alphaUpdate.a = bfi.a.alpha.cur, alphaUpdate.o = bfi.o.alpha.cur)  
+}
+
+it.dfp$index <- c(1:nrow(it.dfp))
+
+ggplot(it.dfp, aes(x = index, y = V2)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) + 
+  xlab("Removed Participants") + 
+  ylab("BFI C Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+ggplot(it.dfp, aes(x = index, y = V3)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) +
+  xlab("Removed Participants") + 
+  ylab("BFI E Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+ggplot(it.dfp, aes(x = index, y = V4)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) +
+  xlab("Removed Participants") + 
+  ylab("BFI N Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+ggplot(it.dfp, aes(x = index, y = V5)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) +
+  xlab("Removed Participants") + 
+  ylab("BFI A Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+ggplot(it.dfp, aes(x = index, y = V6)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) +
+  xlab("Removed Participants") + 
+  ylab("BFI O Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+```
+
+Flagging system
+
+```{r}
+it.dfpf <- as.data.frame(matrix(ncol = 6))
+datatestp <- data
+for(i in 1:225){
+  list.sub <- c(datatestp$sub.id[datatestp$attentionf==max(datatestp$attentionf)])
+  datatestp <- subset(datatestp, sub.id != list.sub[1])
+  
+  bfi.c.cur <- datatestp[, c("bfico.3r", "bficp.8r", "bficr.13", "bfico.18","bficp.23r","bficr.28r",
+                             "bfico.33.ac1a", "bficp.38","bficr.43","bfico.48r", "bficp.53", "bficr.58r")]
+  bfi.c.alpha.cur <- psych::alpha(bfi.c.cur)
+  bfi.c.alpha.cur <- bfi.c.alpha.cur$total[1]
+  
+  bfi.e.cur <- datatestp[, c("bfies.1", "bfiea.6", "bfiee.11r.ac2a", "bfies.16r", "bfiea.21", "bfiee.26r", 
+                             "bfies.31r", "bfiea.36r", "bfiee.41", "bfies.46", "bfiea.51r", "bfiee.56")]
+  bfi.e.alpha.cur <- psych::alpha(bfi.e.cur)
+  bfi.e.alpha.cur <- bfi.e.alpha.cur$total[1]
+  
+  bfi.n.cur <- datatestp[, c("bfina.4r","bfind.9r", "bfine.14","bfina.19","bfind.24r.ac4a", "bfine.29r", 
+                             "bfina.34", "bfind.39", "bfine.44r", "bfina.49r", "bfind.54", "bfine.59")]
+  bfi.n.alpha.cur <- psych::alpha(bfi.n.cur)
+  bfi.n.alpha.cur <- bfi.n.alpha.cur$total[1]  
+  
+  bfi.a.cur <- datatestp[, c("bfiac.2", "bfiar.7", "bfiat.12r.ac3a", "bfiac.17r", "bfiar.22r", "bfiat.27",
+                             "bfiac.32", "bfiar.37r", "bfiat.42r", "bfiac.47r", "bfiar.52", "bfiat.57")]
+  bfi.a.alpha.cur <- psych::alpha(bfi.a.cur)
+  bfi.a.alpha.cur <- bfi.a.alpha.cur$total[1] 
+  
+  bfi.o.cur <- datatestp[, c("bfioa.5r.ac5a", "bfioi.10", "bfioc.15", "bfioa.20", "bfioi.25r", "bfioc.30r", "bfioa.35", 
+                             "bfioi.40", "bfioc.45r", "bfioa.50r", "bfioi.55r", "bfioc.60")]
+  bfi.o.alpha.cur <- psych::alpha(bfi.o.cur)
+  bfi.o.alpha.cur <- bfi.o.alpha.cur$total[1] 
+  
+  it.dfpf[i,] <- data.frame(sub.id = list.sub[1], alphaUpdate.c = bfi.c.alpha.cur, alphaUpdate.e = bfi.e.alpha.cur, 
+                           alphaUpdate.n = bfi.n.alpha.cur, alphaUpdate.a = bfi.a.alpha.cur, alphaUpdate.o = bfi.o.alpha.cur)  
+}
+
+it.dfpf$index <- c(1:nrow(it.dfpf))
+
+ggplot(it.dfpf, aes(x = index, y = V2)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) + 
+  xlab("Removed Participants") + 
+  ylab("BFI C Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+ggplot(it.dfpf, aes(x = index, y = V3)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) +
+  xlab("Removed Participants") + 
+  ylab("BFI E Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+ggplot(it.dfpf, aes(x = index, y = V4)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) +
+  xlab("Removed Participants") + 
+  ylab("BFI N Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+ggplot(it.dfpf, aes(x = index, y = V5)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) +
+  xlab("Removed Participants") + 
+  ylab("BFI A Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+ggplot(it.dfpf, aes(x = index, y = V6)) +
+  geom_point(size = 2, col = "blue", alpha = .3) +
+  geom_smooth(method = "loess", col = "yellow", size = 1, alpha = .3) +
+  xlab("Removed Participants") + 
+  ylab("BFI O Alpha") + 
+  geom_text(aes(x=1, y=.7), label="") +
+  theme_classic()
+
+```
+
