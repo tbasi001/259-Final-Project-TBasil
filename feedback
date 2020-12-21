@@ -1,0 +1,19 @@
+Hi! 
+See below for comments from Jake and I. We’re happy to chat about any questions you have. Thanks for a great quarter and have a nice break! 
+Amanda
+
+Code Book Comments: 
+In the ReadMe, you say that you, “simple percent of maximum possible differences were calculated by taking the absolute value of the pair difference and dividing by the maximum possible difference on the scale. These 15 difference scores were then summed and z scored.” (a) Is that not in this script? (b) Why not just use the distance? Why divide by maximum possible difference? Trying to follow what the dividing contributes. e.g. A column of absolute diff vs. column of absolute diff divided by maximum difference should be perfectly correlated, no? You’re applying a constant to the column. I may be misunderstanding though.
+Glad to see you use the Github Read me function and to explain what your code is doing
+It would be helpful, in the future, to include variable names, descriptions, and possible values 
+
+Code Comments: 
+Commenting your code would be useful so that it is easier for a naive reader to understand.
+Small point but your for loop takes some time and if you wanted it to go faster, just remove the “as.data.frame” at beginning and keep as a matrix. All your variables that you input are numeric so matrix works fine and faster for this problem.
+Is alpha correlated with sample size? Part of why this may not have worked is decreasing sample size maybe?
+You may want to code a contingency/if statement in which if removing a participant improves alpha, remove them, else, keep them. That may help isolate a solution.
+Your flagging system is based off of coding if it’s above or below the middle response, but the middle response on the scale versus the average or median response for participants are different and may be different psychologically. I do wonder if the midpoint on the scale as a threshold for flagging could be potentially arbitrary. I suspect opposite sides of median may be more meaningful, but not sure. Also, this seems like it’s just a coarser measure of distance, right? I bet if you did a correlation between them, they’d be pretty highly correlated.
+
+
+Grade: Pass
+
